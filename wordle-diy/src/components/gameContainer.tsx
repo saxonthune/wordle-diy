@@ -10,6 +10,7 @@ import StatusHeader from './statusHeader';
 import { urlService } from '@/services/urlService';
 import { difficultyValidationService } from '@/services/difficultyValidationService';
 import { DifficultyRule } from '@/types/DifficultyRule';
+import DifficultyTip from './difficultyTip';
 
 interface GameContainerProps {
     gameSettingsInput: GameSettings;
@@ -58,6 +59,10 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         return result[0];
     }
 
+    function clearDifficultyTip() {
+        setDifficultyRule(DifficultyRule.None);
+    }
+
     if (!gameSettings || !gameSettings.solution) {
         return <div>Loading...</div>;
     }
@@ -66,6 +71,9 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         <div className="flex flex-col min-h-screen w-full">
             <div className="w-full p-2">
                 <StatusHeader gameSettings={gameSettings}/>
+            </div>
+            <div className="w-full p-2 bg-gray-100 rounded-md shadow-md">
+                <DifficultyTip difficultyRule={difficultyRule} />
             </div>
             { /* debug */ }
             <div className='flex flex-col w-full p-4 break-words'>
@@ -82,6 +90,7 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                     disabled={gameComplete}
                     gameSettings={gameSettings}
                     handleDifficultyTipCallback={handleDifficultyTipCallback}
+                    clearDifficultyTip={clearDifficultyTip}
                 />
             </div>
         </div>

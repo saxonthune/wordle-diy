@@ -4,7 +4,6 @@ import React from "react";
 import Keyboard from "./keyboard";
 import { guessIsInWordBank } from "@/services/wordBankValidationService";
 import { GameSettings } from "@/types/GameSettings";
-import { difficultyValidationService } from "@/services/difficultyValidationService";
 
 interface KeyboardGuessProps {
     onSubmit: (guess: string) => void;
@@ -12,9 +11,11 @@ interface KeyboardGuessProps {
     disabled: boolean;
     gameSettings: GameSettings;
     handleDifficultyTipCallback: (guess: string) => boolean;
+    clearDifficultyTip: () => void; 
 }
 
-export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings, handleDifficultyTipCallback }: KeyboardGuessProps) {
+export default function KeyboardGuess({ onSubmit, wordLength, disabled, 
+    gameSettings, handleDifficultyTipCallback, clearDifficultyTip }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -27,6 +28,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
             case "back":
                 setCanSubmit(false);
                 setGuess(guess.slice(0, -1));
+                clearDifficultyTip();
                 break;
             case "enter":
                 console.log("canSubmit", canSubmit);
@@ -35,6 +37,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
                     onSubmit(guess);
                     setGuess("");
                     setCanSubmit(false);
+                    clearDifficultyTip();
                 }
                 break;
             default:
@@ -42,6 +45,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
                     if (guess.length + 1 === wordLength) {
                         if (handleDifficultyTipCallback(guess + key) && 
                         (guessIsInWordBank(guess + key) !== false)) {
+                            clearDifficultyTip();
                             setCanSubmit(true);
                         }
                     }
