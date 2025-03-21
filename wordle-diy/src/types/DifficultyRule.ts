@@ -1,8 +1,8 @@
 export enum DifficultyRule {
-    none,
-    fullWordHasNotBeenGuessed,
-    allCorrectLettersAreInPosition,
-    allPartialLettersAreUsed,
-    notInAnswerLettersAreNotPresent,
-    partialLettersAreNotInPreviousPositions,
+    None,
+    FullWordHasNotBeenGuessed,
+    AllCorrectLettersAreInPosition,
+    AllPartialLettersAreUsed,
+    NotInAnswerLettersAreNotPresent,
+    PartialLettersAreNotInPreviousPositions,
 }

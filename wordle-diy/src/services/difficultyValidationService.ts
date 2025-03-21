@@ -3,11 +3,11 @@ import { DifficultyRule } from "@/types/DifficultyRule";
 import { GuessLetter } from "@/types/GuessLetter";
 import { LetterStatus } from "@/types/letterStatus";
 
-interface GuessValidationService {
+interface difficultyValidationService {
     guessIsValid: (guess: string, guessHistory: GuessLetter[][], difficulty: Difficulty) => [boolean, DifficultyRule];
 }
 
-export const guessValidationService: GuessValidationService = {
+export const difficultyValidationService: difficultyValidationService = {
     guessIsValid(guess: string, guessHistory: GuessLetter[][], difficulty: Difficulty): [boolean, DifficultyRule] {
         switch (difficulty) {
             case Difficulty.Regular:
@@ -17,7 +17,7 @@ export const guessValidationService: GuessValidationService = {
             case Difficulty.Hard:
                 return hard(guess, guessHistory);
             default:
-                return [true, DifficultyRule.none];
+                return [true, DifficultyRule.None];
         }
     }
 }
@@ -32,7 +32,7 @@ function nytHard(guess: string, guessHistory: GuessLetter[][]): [boolean, Diffic
         allPartialLettersAreUsed(guess, guessHistory)];
 
     return [result.every((element) => element[0]),
-            result.find((element) => !element[0])?.[1] || DifficultyRule.none];
+            result.find((element) => !element[0])?.[1] || DifficultyRule.None];
 }
 
 function hard(guess: string, guessHistory: GuessLetter[][]): [boolean, DifficultyRule] {
@@ -43,17 +43,17 @@ function hard(guess: string, guessHistory: GuessLetter[][]): [boolean, Difficult
         partialLettersAreNotInPreviousPositions(guess, guessHistory)];
 
     return [result.every((element) => element[0]),
-            result.find((element) => !element[0])?.[1] || DifficultyRule.none];
+            result.find((element) => !element[0])?.[1] || DifficultyRule.None];
 }
 
 
 function fullWordHasNotBeenGuessed(guess: string, guessHistory: GuessLetter[][]): [boolean, DifficultyRule] {
     for (const guessData of guessHistory) {
         if (guess === guessData.map((letter) => letter.letter).join("")) {
-            return [false, DifficultyRule.fullWordHasNotBeenGuessed];
+            return [false, DifficultyRule.FullWordHasNotBeenGuessed];
         }
     }
-    return [true, DifficultyRule.fullWordHasNotBeenGuessed];
+    return [true, DifficultyRule.FullWordHasNotBeenGuessed];
 }
 
 function allCorrectLettersAreInPosition(guess: string, guessHistory: GuessLetter[][]): [boolean, DifficultyRule] {
@@ -61,12 +61,12 @@ function allCorrectLettersAreInPosition(guess: string, guessHistory: GuessLetter
         for (let i = 0; i < guessData.length; i++) {
             if (guessData[i].status === LetterStatus.Correct) {
                 if (guess[i] !== guessData[i].letter) {
-                    return [false, DifficultyRule.allCorrectLettersAreInPosition];
+                    return [false, DifficultyRule.AllCorrectLettersAreInPosition];
                 }
             }
         }
     }
-    return [true, DifficultyRule.allCorrectLettersAreInPosition];
+    return [true, DifficultyRule.AllCorrectLettersAreInPosition];
 }
 
 // assumes that most recent guess will have all necessary data; this is valid if the ruleset is static
@@ -79,10 +79,10 @@ function allPartialLettersAreUsed(guess: string, guessHistory: GuessLetter[][]):
             partialLetters.splice(partialLetters.indexOf(letter), 1);
         }
         else {
-            return [false, DifficultyRule.allPartialLettersAreUsed];
+            return [false, DifficultyRule.AllPartialLettersAreUsed];
         }
     }
-    return [true, DifficultyRule.allPartialLettersAreUsed];
+    return [true, DifficultyRule.AllPartialLettersAreUsed];
 }
 
 function notInAnswerLettersAreNotPresent(guess: string, guessHistory: GuessLetter[][]): [boolean, DifficultyRule] {
@@ -91,11 +91,11 @@ function notInAnswerLettersAreNotPresent(guess: string, guessHistory: GuessLette
         .map((letter) => letter.letter);
     for (const letter of guess) {
         if (unusedLettersInGuessHistory.includes(letter)) {
-            return [false, DifficultyRule.notInAnswerLettersAreNotPresent];
+            return [false, DifficultyRule.NotInAnswerLettersAreNotPresent];
         }
     }
 
-    return [true, DifficultyRule.notInAnswerLettersAreNotPresent];
+    return [true, DifficultyRule.NotInAnswerLettersAreNotPresent];
 }
 
 function partialLettersAreNotInPreviousPositions(guess: string, guessHistory: GuessLetter[][]): [boolean, DifficultyRule] {
@@ -103,10 +103,10 @@ function partialLettersAreNotInPreviousPositions(guess: string, guessHistory: Gu
         for (const guessData of guessHistory) {
             if (guessData[i].status === LetterStatus.Partial) {
                 if (guess[i] === guessData[i].letter){
-                    return [false, DifficultyRule.partialLettersAreNotInPreviousPositions];
+                    return [false, DifficultyRule.PartialLettersAreNotInPreviousPositions];
                 }
             }
         }
     }
-    return [true, DifficultyRule.partialLettersAreNotInPreviousPositions];
+    return [true, DifficultyRule.PartialLettersAreNotInPreviousPositions];
 }
