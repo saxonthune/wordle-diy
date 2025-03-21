@@ -8,6 +8,8 @@ import { GuessLetter } from '@/types/GuessLetter';
 import { GameSettings } from '../types/GameSettings';
 import StatusHeader from './statusHeader';
 import { urlService } from '@/services/urlService';
+import { difficultyValidationService } from '@/services/difficultyValidationService';
+import { DifficultyRule } from '@/types/DifficultyRule';
 
 interface GameContainerProps {
     gameSettingsInput: GameSettings;
@@ -18,6 +20,7 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
     const [gameComplete, setGameComplete] = React.useState(false);
     const [guessHistory, setGuessHistory] = React.useState<GuessLetter[][]>([]);
     const [gameSettings, setGameSettings] = React.useState<GameSettings>(() => ({...gameSettingsInput}));
+    const [difficultyRule, setDifficultyRule] = React.useState(DifficultyRule.None);
 
     React.useEffect(() => {
         const guesses = gameSettingsInput.guesses.map(guess => 
@@ -47,6 +50,14 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         setGameSettings({...gameSettings, guesses: [...gameSettings.guesses, guess]});
     }
 
+    function handleDifficultyTipCallback(guess: string): boolean {
+        const result = difficultyValidationService.guessIsValid(guess, guessHistory, gameSettings.difficulty) 
+        if (!result[0]) {
+            setDifficultyRule(result[1]);
+        }
+        return result[0];
+    }
+
     if (!gameSettings || !gameSettings.solution) {
         return <div>Loading...</div>;
     }
@@ -69,6 +80,8 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                     onSubmit={(guess) => handleGuess(guess)}
                     wordLength={gameSettings.solution.length}
                     disabled={gameComplete}
+                    gameSettings={gameSettings}
+                    handleDifficultyTipCallback={handleDifficultyTipCallback}
                 />
             </div>
         </div>

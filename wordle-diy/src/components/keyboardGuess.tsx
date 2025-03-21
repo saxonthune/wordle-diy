@@ -3,14 +3,18 @@
 import React from "react";
 import Keyboard from "./keyboard";
 import { guessIsInWordBank } from "@/services/wordBankValidationService";
+import { GameSettings } from "@/types/GameSettings";
+import { difficultyValidationService } from "@/services/difficultyValidationService";
 
 interface KeyboardGuessProps {
     onSubmit: (guess: string) => void;
     wordLength: number;
     disabled: boolean;
+    gameSettings: GameSettings;
+    handleDifficultyTipCallback: (guess: string) => boolean;
 }
 
-export default function KeyboardGuess({ onSubmit, wordLength, disabled }: KeyboardGuessProps) {
+export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings, handleDifficultyTipCallback }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -27,8 +31,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled }: Keyboa
             case "enter":
                 console.log("canSubmit", canSubmit);
                 console.log("isInWordBank", guessIsInWordBank(guess));
-                if (canSubmit)
-                {
+                if (canSubmit) {
                     onSubmit(guess);
                     setGuess("");
                     setCanSubmit(false);
@@ -36,9 +39,11 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled }: Keyboa
                 break;
             default:
                 if (guess.length < wordLength) {
-                    if (guess.length + 1 === wordLength)
-                    {
-                        setCanSubmit(guessIsInWordBank(guess + key) !== false);
+                    if (guess.length + 1 === wordLength) {
+                        if (handleDifficultyTipCallback(guess + key) && 
+                        (guessIsInWordBank(guess + key) !== false)) {
+                            setCanSubmit(true);
+                        }
                     }
                     setGuess(guess + key);
                 }
