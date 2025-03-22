@@ -2,7 +2,9 @@ import DiyContainer from "@/components/diyContainer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen">
+      <main className="h-full flex"
+        style={{ height: 'calc(var(--vh, 1vh)' }}
+      >
         <DiyContainer/>
     </main>
   );
