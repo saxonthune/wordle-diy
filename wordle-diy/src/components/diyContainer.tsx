@@ -31,7 +31,7 @@ export default function DiyContainer() {
                 setValidSolutionTip("⛔");
                 break;
             case null:
-                setValidSolutionTip("❔ (length not supported)");
+                setValidSolutionTip("❔ (no dictionary support for this length)");
         }
     }
 
@@ -75,8 +75,8 @@ export default function DiyContainer() {
     }
 
     return (
-        <div className="flex flex-col gap-8 break-words mx-auto overflow-wrap">
-            <h1 className="text-3xl">Build a Wordle</h1>
+        <div className="flex flex-col min-h-screen break-words p-2">
+            <h1 className="flex justify-center text-3xl pb-8">Wordle DIY</h1>
             <div className="flex flex-col gap-4">
                 <label className="text-lg" htmlFor="answer">Solution</label>
                 <input className="p-2 border border-gray-300" id="word" type="text" 
@@ -101,7 +101,7 @@ export default function DiyContainer() {
                 <i>{difficultyTip}</i>
                 <p>{difficultyBlurb}</p>
             </div>
-            <button className="bg-blue-500 text-white p-2 rounded" onClick={handleGenerateOnClick}>Generate Code</button>
+            <button className="bg-blue-500 text-white p-2 rounded cursor-pointer" onClick={handleGenerateOnClick}>Generate Code</button>
             
             {/*
             <div className='max-w-[300px] mx-auto break-words'>
@@ -109,10 +109,11 @@ export default function DiyContainer() {
                 <button className="bg-blue-500 text-white p-2 rounded w-full" onClick={() => navigator.clipboard.writeText( gameUrl. ) }>Copy Code</button>
             </div>
             */}
-            <div className='max-w-[300px] mx-auto break-words'>
+            { (gameUrl) ? <div className='max-w-[300px] mx-auto break-words'>
                 <p><b>url:</b> {gameUrl}</p>
-                <button className="bg-blue-500 text-white p-2 rounded w-full" onClick={() => navigator.clipboard.writeText(gameUrl) }>Copy Url</button>
+                <button className="bg-blue-500 text-white p-2 rounded w-full cursor-pointer" onClick={() => navigator.clipboard.writeText(gameUrl) }>Copy Url</button>
             </div>
+            : <></>}
         </div>
     );
 }
