@@ -7,19 +7,22 @@ export function gradeGuess(answer: string, guess: string): GuessLetter[] {
     }
 
     let letterBank = answer;
-
     const letterStatuses = Array(answer.length).fill(LetterStatus.NotInAnswer);
 
     // Need to remove correct letters from letterBank, before checking for duplicates in wrong position
     for (let i = 0; i < guess.length; i++) {
-
         if (answer[i] === guess[i]) {
             letterStatuses[i] = LetterStatus.Correct;
             const letterBankIndex = letterBank.indexOf(answer[i]);
             letterBank = letterBank.slice(0, letterBankIndex) + letterBank.slice(letterBankIndex + 1);
         }
     }
+    console.log(answer, guess, letterBank);
     for (let i = 0; i < guess.length; i++) {
+        if (letterStatuses[i] === LetterStatus.Correct) {
+            continue;
+        }
+
         if (letterBank.includes(guess[i])) {
             letterStatuses[i] = LetterStatus.Partial;
             const letterBankIndex = letterBank.indexOf(guess[i]);
