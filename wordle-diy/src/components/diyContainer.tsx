@@ -20,6 +20,7 @@ export default function DiyContainer() {
     const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
 
     function handleSolutionChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setGameUrl("");
         if (/^[a-zA-Z]*$/.test(event.target.value) && event.target.value.length <= 30) {
             setSolution(event.target.value.toUpperCase());
         }
@@ -116,7 +117,7 @@ export default function DiyContainer() {
                 : <></>
             }
             
-            { (gameUrl) ? <div className='mx-auto break-words p-2 pt-4'>
+            { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
                 <p><b>Success!</b> Your wordle game with solution '{solution}' has been created. Open{' '}
                 <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                     {"this link\u{29C9}"}
