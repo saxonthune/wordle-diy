@@ -1,5 +1,5 @@
 export enum Difficulty {
-    Regular,
+    Normal,
     NytHard,
     Hard
 }

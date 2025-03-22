@@ -10,28 +10,38 @@ export default function DiyContainer() {
     const [solution, setSolution] = React.useState("");
     const [validSolutionTip, setValidSolutionTip] = React.useState("");
     const [par, setPar] = React.useState(6);
-    const [difficulty, setDifficulty] = React.useState(Difficulty.Regular);
+    const [difficulty, setDifficulty] = React.useState(Difficulty.Normal);
     const [difficultyBlurb, setDifficultyBlurb] = React.useState("");
     const [gameUrl, setGameUrl] = React.useState<string>("");
+    const [canCreateUrl, setCanCreateUrl] = React.useState(false);
 
     const difficultyTip = 'Difficulty determines how previous guesses impact which letters a player can input on their current guess.';
     const parTip = 'Wordle DIY does not have a guess limit, but you can set a recommended number of guesses, or par, for players.';
-    const lengthTip = 'You can pick any word length, but currently only five-letter have dictionary support.';
+    const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
 
     function handleSolutionChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (/^[a-zA-Z]*$/.test(event.target.value) && event.target.value.length <= 30) {
             setSolution(event.target.value.toUpperCase());
         }
 
+        if (!event.target.value || event.target.value.length === 0) {
+            setCanCreateUrl(false);
+            setValidSolutionTip("");
+            return;
+        }
+
         switch (guessIsInWordBank(event.target.value.toUpperCase())) {
             case true:
+                setCanCreateUrl(true);
                 setValidSolutionTip("✅");
                 break;
             case false:
-                setValidSolutionTip("⛔");
+                setCanCreateUrl(false);
+                setValidSolutionTip("⛔ not in dictionary");
                 break;
             case null:
-                setValidSolutionTip("❔ (no dictionary support for this length)");
+                setCanCreateUrl(true);
+                setValidSolutionTip("❔ no dictionary support for this length");
         }
     }
 
@@ -39,8 +49,8 @@ export default function DiyContainer() {
         const newDifficulty: Difficulty = parseInt(event.target.value);
         setDifficulty(newDifficulty);
         switch (newDifficulty) {
-            case Difficulty.Regular:
-                setDifficultyBlurb("Regular difficulty is the default Wordle experience.");
+            case Difficulty.Normal:
+                setDifficultyBlurb("Normal difficulty is the default Wordle experience.");
                 break;
             case Difficulty.NytHard:
                 setDifficultyBlurb("NYT Hard: all correct (green) letters are in the correct position, and all partial (yellow) letters are used.");
@@ -54,7 +64,7 @@ export default function DiyContainer() {
     }
 
     function handleGenerateOnClick() {
-        if (solution.length === 0 || validSolutionTip !== "✅") {
+        if (solution.length === 0) {
             alert("Please enter a valid solution.");
             return;
         }
@@ -75,14 +85,13 @@ export default function DiyContainer() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen break-words p-2">
+        <div className="flex flex-col min-h-screen break-words p-2 gap-4">
             <h1 className="flex justify-center text-3xl pb-8">Wordle DIY</h1>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
                 <label className="text-lg" htmlFor="answer">Solution</label>
                 <input className="p-2 border border-gray-300" id="word" type="text" 
                     value={solution} onChange={handleSolutionChange}/>
-                <p>Solution length: {solution.length}.</p>
-                <p>Validity: {validSolutionTip}</p>
+                <p>Solution Validity: {validSolutionTip}</p>
                 <i>{lengthTip}</i>
             </div>
             <div className="flex flex-col gap-4">
@@ -94,24 +103,26 @@ export default function DiyContainer() {
             <div className="flex flex-col gap-4">
                 <label className="text-lg" htmlFor="difficulty">Difficulty</label>
                 <select className="p-2 border border-gray-300" id="difficulty" onChange={handleDifficultyChange}>
-                    <option value={Difficulty.Regular}>Regular</option>
+                    <option value={Difficulty.Normal}>Regular</option>
                     <option value={Difficulty.NytHard}>Nyt Hard</option>
                     <option value={Difficulty.Hard}>Really Hard</option>
                 </select>
                 <i>{difficultyTip}</i>
                 <p>{difficultyBlurb}</p>
             </div>
-            <button className="bg-blue-500 text-white p-2 rounded cursor-pointer" onClick={handleGenerateOnClick}>Generate Code</button>
+            {canCreateUrl
+                ? <button className="bg-blue-500 text-white p-2 rounded cursor-pointer" 
+                    onClick={handleGenerateOnClick}>Generate Code</button>
+                : <></>
+            }
             
-            {/*
-            <div className='max-w-[300px] mx-auto break-words'>
-                <p><b>code:</b> {new URL(gameUrl).searchParams.get('code')}</p>
-                <button className="bg-blue-500 text-white p-2 rounded w-full" onClick={() => navigator.clipboard.writeText( gameUrl. ) }>Copy Code</button>
-            </div>
-            */}
-            { (gameUrl) ? <div className='max-w-[300px] mx-auto break-words'>
-                <p><b>url:</b> {gameUrl}</p>
-                <button className="bg-blue-500 text-white p-2 rounded w-full cursor-pointer" onClick={() => navigator.clipboard.writeText(gameUrl) }>Copy Url</button>
+            { (gameUrl) ? <div className='mx-auto break-words p-2 pt-4'>
+                <p><b>Success!</b> Your wordle game with solution '{solution}' has been created. Open{' '}
+                <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                    {"this link\u{29C9}"}
+                </a>
+                    {" in a new tab, or copy and send it to a friend!"}
+                </p>
             </div>
             : <></>}
         </div>

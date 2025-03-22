@@ -7,7 +7,6 @@ import { LetterStatus } from '@/types/letterStatus';
 import { GuessLetter } from '@/types/GuessLetter';
 import { GameSettings } from '../types/GameSettings';
 import StatusHeader from './statusHeader';
-import { urlService } from '@/services/urlService';
 import { difficultyValidationService } from '@/services/difficultyValidationService';
 import { DifficultyRule } from '@/types/DifficultyRule';
 import DifficultyTip from './difficultyTip';
@@ -27,25 +26,6 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         const guesses = gameSettingsInput.guesses.map(guess => 
             guess.toUpperCase().substring(0, gameSettingsInput.solution.length));
         const guessData: GuessLetter[][] = [];
-
-        guesses.push('AEGIS   '.toUpperCase().substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length)); // debug
 
         setGameComplete(false);
         for (const guess of guesses) {
@@ -97,11 +77,11 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                 <StatusHeader gameSettings={gameSettings}/>
             </div>
             }
-            <div className="flex-grow overflow-y-auto">
-                { /* debug */
+            <div className="flex-grow overflow-y-auto p-2">
+                { /* debug 
                 <div className='flex flex-col w-full p-4 break-words'>
                     <div>{JSON.stringify(gameSettings)}</div>
-                </div>
+                </div> */
                 }
                 <GuessHistory guessHistory={guessHistory} />
             </div>

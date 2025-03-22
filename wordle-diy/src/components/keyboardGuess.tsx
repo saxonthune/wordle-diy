@@ -19,6 +19,13 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
+    
+    React.useEffect(() => {
+        if (disabled) {
+            setGuess("Well done!");
+        }
+    }
+    , [disabled]);
 
     const handleButtonClick = (key: string) => {
         if (disabled) 

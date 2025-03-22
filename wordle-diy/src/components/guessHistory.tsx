@@ -16,7 +16,6 @@ export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
             case LetterStatus.NotInAnswer:
                 return 'bg-gray-500';
             case LetterStatus.Partial:
-                //return 'text-yellow-500';
                 return 'bg-yellow-500';
             case LetterStatus.Correct:
                 return 'bg-green-500';
@@ -31,8 +30,8 @@ export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
       <div className={`grid gap-1 pb-[4px] items-center justify-center mx-auto`}
         key={i}
         style={{
-            gridTemplateColumns: `repeat(${guess.length}, minmax(0, 1fr))`, // Dynamically set the number of columns
-            maxWidth: `${(blockSize+4)*guess.length}px`, // Ensure it doesn't exceed the container width
+            gridTemplateColumns: `repeat(${guess.length}, minmax(0, 1fr))`, 
+            maxWidth: `${(blockSize+4)*guess.length}px`, 
         }}
         >
         {guess.map((guessDatum, i) => (

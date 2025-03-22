@@ -10,7 +10,7 @@ interface difficultyValidationService {
 export const difficultyValidationService: difficultyValidationService = {
     guessIsValid(guess: string, guessHistory: GuessLetter[][], difficulty: Difficulty): [boolean, DifficultyRule] {
         switch (difficulty) {
-            case Difficulty.Regular:
+            case Difficulty.Normal:
                 return regular(guess, guessHistory);
             case Difficulty.NytHard:
                 return nytHard(guess, guessHistory);

@@ -11,7 +11,7 @@ export default function Home() {
         solution: "",
         guesses: [],
         par: 6,
-        difficulty: Difficulty.Regular,
+        difficulty: Difficulty.Normal,
         version: "1.0"
     };
 

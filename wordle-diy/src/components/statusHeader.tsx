@@ -7,7 +7,7 @@ export default function StatusHeader({ gameSettings }: { gameSettings: GameSetti
     return (
         <div className="status-header grid grid-cols-3 gap-2 text-center">
             <p className="justify-self-start">{`Guesses: ${gameSettings.guesses.length}/${gameSettings.par}`}</p>
-            <p className="justify-self-start">{`Difficulty: ${Difficulty[gameSettings.difficulty]}`}</p>
+            <p className="">{`Difficulty: ${Difficulty[gameSettings.difficulty]}`}</p>
             <div className="justify-self-end">
                 <a className="bg-blue-500 rounded text-white px-2 hover:text-gray-700" href = "/diy">DIY</a>
             </div>
