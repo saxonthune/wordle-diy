@@ -31,12 +31,8 @@ export default function Home() {
             return;
         }
 
-        console.log("url", url);
-        console.log("leaf", code);
         const gameSettingsString = urlService.atobUrlSafe(code.replace(/-/g, '+').replace(/_/g, '/'));
         setGameSettings(JSON.parse(gameSettingsString) as GameSettings);
-        console.log("gameSettingsString", gameSettingsString);
-        console.log("gameSettings", JSON.parse(gameSettingsString));
     }
 
   return (

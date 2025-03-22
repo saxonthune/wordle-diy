@@ -14,6 +14,5 @@ export function guessIsInWordBank(guess: string): boolean | null {
     const wordBank = getWordBank(guess.length);
     if (wordBank.length === 0) // if word length is not yet supported, allow all guesses
         return null; 
-    console.log("wordBank len", wordBank.length)
     return wordBank.includes(guess);
 }

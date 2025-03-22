@@ -31,8 +31,6 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
                 clearDifficultyTip();
                 break;
             case "enter":
-                console.log("canSubmit", canSubmit);
-                console.log("isInWordBank", guessIsInWordBank(guess));
                 if (canSubmit) {
                     onSubmit(guess);
                     setGuess("");
@@ -58,7 +56,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
     return (
         <div className="flex flex-col items-center gap-4">
             <div className="min-h-[28px]">{guess}</div>
-            <Keyboard onKeyPress={handleButtonClick} canSubmit={canSubmit} />
+            <Keyboard onKeyPress={handleButtonClick} canSubmit={canSubmit} gameComplete={disabled}/>
         </div>
 
     );
