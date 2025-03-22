@@ -36,7 +36,9 @@ export default function Home() {
     }
 
   return (
-      <main className="min-h-screen flex">
+      <main className="h-full flex"
+        style={{ height: 'calc(var(--vh, 1vh)' }}
+      >
         <GameContainer gameSettingsInput={gameSettings} />
       </main>
   );

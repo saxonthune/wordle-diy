@@ -54,8 +54,8 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
     };
     
     return (
-        <div className="flex flex-col items-center gap-4">
-            <div className="min-h-[28px]">{guess}</div>
+        <div className="flex flex-col items-center gap-1">
+            <div className="text-2xl min-h-[28px]">{guess}</div>
             <Keyboard onKeyPress={handleButtonClick} canSubmit={canSubmit} gameComplete={disabled}/>
         </div>
 

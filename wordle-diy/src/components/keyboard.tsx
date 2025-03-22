@@ -20,7 +20,7 @@ export default function Keyboard({ onKeyPress, canSubmit, gameComplete }: Keyboa
     return canSubmit ? "🚀" : "⛔";
   }
 
-  const buttonClass = "rounded bg-gray-500 min-w-[28px] className=text-[clamp(0.75rem, 2vw, 1.5rem)]";
+  const buttonClass = "rounded bg-gray-400 min-w-[28px] className=text-[clamp(0.75rem, 2vw, 1.5rem)]";
   const submitBackButtonClass = "text-[clamp(0.75rem, 2vw, 1.5rem)]";
 
   return (

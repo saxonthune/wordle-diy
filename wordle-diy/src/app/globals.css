@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --vh: 100vh;
+}
+
+@supports (-webkit-touch-callout: none) {
+    :root {
+        --vh: 100%;
+    }
 }
 
 @theme inline {
@@ -36,4 +43,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    height: calc(var(--vh, 1vh) * 100);
 }
