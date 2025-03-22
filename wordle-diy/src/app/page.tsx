@@ -27,7 +27,7 @@ export default function Home() {
         const url = window.location.href;
         const code = new URL(url).searchParams.get('code');
         if (!code || code.length === 0){
-            window.location.href = '/diy';
+            window.location.href = process.env.NEXT_PUBLIC_ROOT_URL + '/diy';
             return;
         }
 

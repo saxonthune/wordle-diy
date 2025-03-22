@@ -15,7 +15,7 @@ export default function StatusHeader({ gameSettings }: { gameSettings: GameSetti
                 <span className="inline">{`${Difficulty[gameSettings.difficulty]}`}</span>
             </p>
             <div className="justify-self-end">
-                <a className="bg-blue-500 rounded text-white px-2 hover:text-gray-700" href = "/diy">DIY</a>
+                <a className="bg-blue-500 rounded text-white px-2 hover:text-gray-700" href={`${process.env.NEXT_PUBLIC_ROOT_URL}/diy`}>DIY</a>
             </div>
         </div>
     );

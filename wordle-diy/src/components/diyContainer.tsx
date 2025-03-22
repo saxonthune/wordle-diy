@@ -81,51 +81,57 @@ export default function DiyContainer() {
         const gameSettingsString = JSON.stringify(gameSettings);
         const gameCode = urlService.btoaUrlSafe(gameSettingsString);
 
-        const url = `${window.location.origin}/?code=${gameCode}`;
+        const url = `${process.env.NEXT_PUBLIC_ROOT_URL}/?code=${gameCode}`;
+        console.log(`root url: ${process.env.NEXT_PUBLIC_ROOT_URL}`);
+        console.log(`Generated URL: ${url}`);
         setGameUrl(url);
     }
 
     return (
-        <div className="flex flex-col min-h-screen break-words p-2 gap-4">
-            <h1 className="flex justify-center text-3xl pb-8">Wordle DIY</h1>
-            <div className="flex flex-col gap-2">
-                <label className="text-lg" htmlFor="answer">Solution</label>
-                <input className="p-2 border border-gray-300" id="word" type="text" 
-                    value={solution} onChange={handleSolutionChange}/>
-                <p>Solution Validity: {validSolutionTip}</p>
-                <i>{lengthTip}</i>
+        <div className="flex flex-col w-full min-h-screen break-words gap-2">
+            <h1 className="flex justify-center rounded-md shadow-md text-4xl p-2 mx-2 bg-sky-200">Wordle DIY</h1>
+
+            <div className="mx-2 p-2 bg-gray-100 rounded shadow-md">
+                <div className="flex flex-col gap-2">
+                    <label className="text-lg" htmlFor="answer">Solution</label>
+                    <input className="p-2 border rounded-md border-gray-300 bg-white" id="word" type="text"
+                        value={solution} onChange={handleSolutionChange}/>
+                    <p>Solution Validity: {validSolutionTip}</p>
+                    <i>{lengthTip}</i>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <label className="text-lg" htmlFor="par">Par</label>
+                    <input className="p-2 border rounded-md bg-white border-gray-300" id="par" type="number"
+                        value={par} onChange={(e) => setPar(Number(e.target.value))}/>
+                    <i>{parTip}</i>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <label className="text-lg" htmlFor="difficulty">Difficulty</label>
+                    <select className="p-2 border rounded-md bg-white border-gray-300" id="difficulty" onChange={handleDifficultyChange}>
+                        <option value={Difficulty.Normal}>Regular</option>
+                        <option value={Difficulty.NytHard}>Nyt Hard</option>
+                        <option value={Difficulty.Hard}>Really Hard</option>
+                    </select>
+                    <i>{difficultyTip}</i>
+                    <p>{difficultyBlurb}</p>
+                </div>
+                {canCreateUrl
+                    ? <button className="bg-blue-500 text-white p-2 rounded-md cursor-pointer"
+                        onClick={handleGenerateOnClick}>Generate Code</button>
+                    : <div className="min-h-[40px]"></div>
+                }
+                
+                { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
+                    <p><b>✅ Success!</b> Your wordle game with solution &lsquo;{solution}&rsquo; has been created. Open{' '}
+                    <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                        {"this link\u{29C9}"}
+                    </a>
+                        {" in a new tab, or copy and send it to a friend!"}
+                    </p>
+                </div>
+                : <div className="min-h-[60px]"></div>}
             </div>
-            <div className="flex flex-col gap-4">
-                <label className="text-lg" htmlFor="par">Par</label>
-                <input className="p-2 border border-gray-300" id="par" type="number"
-                    value={par} onChange={(e) => setPar(Number(e.target.value))}/>
-                <i>{parTip}</i>
-            </div>
-            <div className="flex flex-col gap-4">
-                <label className="text-lg" htmlFor="difficulty">Difficulty</label>
-                <select className="p-2 border border-gray-300" id="difficulty" onChange={handleDifficultyChange}>
-                    <option value={Difficulty.Normal}>Regular</option>
-                    <option value={Difficulty.NytHard}>Nyt Hard</option>
-                    <option value={Difficulty.Hard}>Really Hard</option>
-                </select>
-                <i>{difficultyTip}</i>
-                <p>{difficultyBlurb}</p>
-            </div>
-            {canCreateUrl
-                ? <button className="bg-blue-500 text-white p-2 rounded cursor-pointer" 
-                    onClick={handleGenerateOnClick}>Generate Code</button>
-                : <></>
-            }
-            
-            { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
-                <p><b>✅ Success!</b> Your wordle game with solution &lsquo;{solution}&rsquo; has been created. Open{' '}
-                <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                    {"this link\u{29C9}"}
-                </a>
-                    {" in a new tab, or copy and send it to a friend!"}
-                </p>
-            </div>
-            : <></>}
+
         </div>
     );
 }
