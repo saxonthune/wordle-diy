@@ -15,7 +15,7 @@ interface KeyboardGuessProps {
 }
 
 export default function KeyboardGuess({ onSubmit, wordLength, disabled, 
-    gameSettings, handleDifficultyTipCallback, clearDifficultyTip }: KeyboardGuessProps) {
+    handleDifficultyTipCallback, clearDifficultyTip }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);

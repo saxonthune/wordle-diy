@@ -118,7 +118,7 @@ export default function DiyContainer() {
             }
             
             { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
-                <p><b>Success!</b> Your wordle game with solution '{solution}' has been created. Open{' '}
+                <p><b>✅ Success!</b> Your wordle game with solution &lsquo;{solution}&rsquo; has been created. Open{' '}
                 <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                     {"this link\u{29C9}"}
                 </a>
