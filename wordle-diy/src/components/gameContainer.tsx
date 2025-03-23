@@ -109,6 +109,10 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                     gameSettings={gameSettings}
                     handleDifficultyTipCallback={handleDifficultyTipCallback}
                     clearDifficultyTip={clearDifficultyTip}
+                    lettersNotInSolution={guessHistory.flat()
+                        .filter(guessLetter => guessLetter.status === LetterStatus.NotInAnswer)
+                        .map(guessLetter => guessLetter.letter.toUpperCase())
+                        .join("")}
                 />
             </div>
         </div>

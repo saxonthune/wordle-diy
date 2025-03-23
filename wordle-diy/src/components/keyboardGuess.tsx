@@ -12,10 +12,11 @@ interface KeyboardGuessProps {
     gameSettings: GameSettings;
     handleDifficultyTipCallback: (guess: string) => boolean;
     clearDifficultyTip: () => void; 
+    lettersNotInSolution: string;
 }
 
 export default function KeyboardGuess({ onSubmit, wordLength, disabled, 
-    handleDifficultyTipCallback, clearDifficultyTip }: KeyboardGuessProps) {
+    handleDifficultyTipCallback, clearDifficultyTip, lettersNotInSolution }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -71,7 +72,12 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
     return (
         <div className="flex flex-col items-center gap-1">
             <div className={`text-2xl min-h-[28px] ${textClass}`}>{guess}</div>
-            <Keyboard onKeyPress={handleButtonClick} canSubmit={canSubmit} gameComplete={disabled}/>
+            <Keyboard 
+                onKeyPress={handleButtonClick} 
+                canSubmit={canSubmit} 
+                gameComplete={disabled}
+                lettersNotInSolution={lettersNotInSolution}
+                />
         </div>
 
     );
