@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface KeyboardProps {
   onKeyPress: (key: string) => void;
@@ -8,10 +8,31 @@ interface KeyboardProps {
   gameComplete: boolean;
 }
 
-export default function Keyboard({ onKeyPress, canSubmit, gameComplete }: KeyboardProps) {
+export default function Keyboard({ onKeyPress: onKeyboardInput, canSubmit, gameComplete }: KeyboardProps) {
   const handleButtonClick = (key: string) => {
-    onKeyPress(key);
+    onKeyboardInput(key);
   };
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const key = event.key.toUpperCase();
+
+            if (key === "ENTER") {
+                onKeyboardInput('enter');
+            } 
+            else if (key === "BACKSPACE") {
+                onKeyboardInput('back');
+            }
+            else if (key.length === 1 && /^[A-Z]$/.test(key)) {
+                onKeyboardInput(key);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onKeyboardInput]);
 
   const displayEnter = () => {
     if (gameComplete) {
