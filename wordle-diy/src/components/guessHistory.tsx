@@ -2,14 +2,13 @@
 import React from 'react';
 import { GuessLetter } from '@/types/GuessLetter';
 import { LetterStatus } from '@/types/letterStatus';
+import { BLOCK_SIZE } from '@/constants/constants';
 
 interface GuessHistoryProps {
   guessHistory: GuessLetter[][];
 }
 
 export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
-
-    const blockSize = 40;
 
     function getClassName(letterStatus: LetterStatus): string {
         switch (letterStatus) {
@@ -31,7 +30,7 @@ export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
         key={i}
         style={{
             gridTemplateColumns: `repeat(${guess.length}, minmax(0, 1fr))`, 
-            maxWidth: `${(blockSize+4)*guess.length}px`, 
+            maxWidth: `${(BLOCK_SIZE+4)*guess.length}px`, 
         }}
         >
         {guess.map((guessDatum, i) => (

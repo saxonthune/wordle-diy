@@ -10,6 +10,7 @@ import StatusHeader from './statusHeader';
 import { difficultyValidationService } from '@/services/difficultyValidationService';
 import { DifficultyRule } from '@/types/DifficultyRule';
 import DifficultyTip from './difficultyTip';
+import { BLOCK_SIZE } from '@/constants/constants';
 
 interface GameContainerProps {
     gameSettingsInput: GameSettings;
@@ -26,6 +27,9 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         const guesses = gameSettingsInput.guesses.map(guess => 
             guess.toUpperCase().substring(0, gameSettingsInput.solution.length));
         const guessData: GuessLetter[][] = [];
+
+        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length));
+        guesses.push('PARTY   '.substring(0, gameSettingsInput.solution.length));
 
         setGameComplete(false);
         for (const guess of guesses) {
@@ -68,12 +72,12 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
     }
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-[400px] mx-auto bg-white rounded-md shadow-lg">
             { difficultyRule !== DifficultyRule.None ?
                 <div className="sticky w-full p-2 bg-yellow-100 rounded-md shadow-md">
                     <DifficultyTip difficultyRule={difficultyRule} />
                 </div>
-            : <div className="sticky w-full p-2 bg-gray-200">
+            : <div className="sticky w-full p-2 bg-gray-200 rounded-md">
                 <StatusHeader gameSettings={gameSettings}/>
             </div>
             }
@@ -84,8 +88,20 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                 </div> */
                 }
                 <GuessHistory guessHistory={guessHistory} />
+                <div className={`grid gap-1 pb-[4px] items-center justify-center mx-auto`}
+                    key={guessHistory.length}
+                    style={{
+                        gridTemplateColumns: `repeat(${gameSettings.solution.length}, minmax(0, 1fr))`, 
+                        maxWidth: `${(BLOCK_SIZE+4)*gameSettings.solution.length}px`, 
+                    }}
+                >
+                    {gameSettings.solution.split('').map((letter, i) => (
+                        <div key={i} className={`border-1 border-gray-300 max-h-[40px] aspect-square rounded items-center justify-center`}>
+                        </div>
+        ))}
+                </div>
             </div>
-            <div className="sticky bottom-0 w-full pb-2 pt-1 bg-white border-t border-gray-300">
+            <div className="sticky bottom-0 w-full pb-1 pt-1 bg-white border-t border-gray-300 rounded-b-md">
                 <KeyboardGuess
                     onSubmit={(guess) => handleGuess(guess)}
                     wordLength={gameSettings.solution.length}

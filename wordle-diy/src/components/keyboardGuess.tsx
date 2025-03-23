@@ -19,6 +19,10 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
+    const [textClass, setTextClass] = React.useState("");
+
+    const validTextClass = "";
+    const invalidTextClass = "text-red-500";
     
     React.useEffect(() => {
         if (disabled) {
@@ -30,6 +34,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
     const handleButtonClick = (key: string) => {
         if (disabled) 
             return;
+        setTextClass(validTextClass)
 
         switch (key) {
             case "back":
@@ -53,6 +58,9 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
                             clearDifficultyTip();
                             setCanSubmit(true);
                         }
+                        else {
+                            setTextClass(invalidTextClass);
+                        }
                     }
                     setGuess(guess + key);
                 }
@@ -62,7 +70,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
     
     return (
         <div className="flex flex-col items-center gap-1">
-            <div className="text-2xl min-h-[28px]">{guess}</div>
+            <div className={`text-2xl min-h-[28px] ${textClass}`}>{guess}</div>
             <Keyboard onKeyPress={handleButtonClick} canSubmit={canSubmit} gameComplete={disabled}/>
         </div>
 
