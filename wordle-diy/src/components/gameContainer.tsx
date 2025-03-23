@@ -28,8 +28,8 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
             guess.toUpperCase().substring(0, gameSettingsInput.solution.length));
         const guessData: GuessLetter[][] = [];
 
-        guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length));
-        guesses.push('PARTY   '.substring(0, gameSettingsInput.solution.length));
+        //guesses.push('AEGIS   '.substring(0, gameSettingsInput.solution.length));
+        //guesses.push('PARTY   '.substring(0, gameSettingsInput.solution.length));
 
         setGameComplete(false);
         for (const guess of guesses) {
@@ -41,7 +41,7 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         }
 
         setGuessHistory(guessData);
-        setGameSettings({...gameSettingsInput});
+        setGameSettings({...gameSettingsInput, guesses: guesses});
     }
     , [gameSettingsInput]);
 

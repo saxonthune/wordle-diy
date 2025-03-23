@@ -88,7 +88,7 @@ export default function DiyContainer() {
     }
 
     return (
-        <div className="flex flex-col w-full min-h-screen break-words gap-2">
+        <div className="flex flex-col w-[800px] mx-auto break-words gap-2">
             <h1 className="flex justify-center rounded-md shadow-md text-4xl p-2 mx-2 bg-sky-200">Wordle DIY</h1>
 
             <div className="mx-2 p-2 bg-gray-100 rounded shadow-md">
