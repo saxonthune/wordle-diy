@@ -60,26 +60,31 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
   return (
     <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50" onClick={onClose}>
       <div className="bg-white rounded-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto shadow-lg" onClick={(e) => e.stopPropagation()}>
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800">Game Information</h2>
+        <div className="flex justify-between items-center p-2 border-b border-gray-200 justify-center">
+          <h2 className="text-2xl font-semibold text-gray-800">{firstOpen ? 'A New Wordle!' : 'Information'}</h2>
         </div>
-        
-        <div className="p-4 space-y-4">
+          <div className="p-4 space-y-2">
+            {gameSettingsInput.author && (
+                <div className="bg-gray-100 p-2 rounded-md">
+                <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author}</b></p>
+                {gameSettingsInput.descriptor && (
+                    <p className="text-sm text-gray-600 mt-2">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleLowerCase()}</b>.</p>
+                )}
+                </div>
+            )}
 
-          <div className="bg-gray-200 p-3 rounded-md">
-            <h3 className="font-semibold text-gray-700 mb-2">Difficulty: {getDifficultyName(gameSettingsInput.difficulty)}</h3>
-            <p className="text-sm text-gray-600">
-              {getDifficultyDescription(gameSettingsInput.difficulty)}
-            </p>
-          </div>
 
-          <div className="bg-gray-200 p-3 rounded-md">
-            <h3 className="font-semibold text-gray-700 mb-2">Par: {gameSettingsInput.par}</h3>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p>The author thinks you can find the solution in <span className="font-medium">{gameSettingsInput.par}</span> guesses.</p>
+            <div className="bg-gray-100 p-2 rounded-md">
+                {/* <p className="text-lg font-bold text-gray-700 mb-0">Game Details</p> */}
+                <p className="text-lg text-gray-700">Difficulty: <b>{getDifficultyName(gameSettingsInput.difficulty)}</b></p>
+                <p className="text-sm text-gray-600 mb-1">
+                {getDifficultyDescription(gameSettingsInput.difficulty)}
+                </p>
+                <p className="text-lg text-gray-700">Par: <b>{gameSettingsInput.par}</b></p>
+                <p className="text-lg text-gray-700">Dictionary Validation: <b>{gameSettingsInput.useDictionary ? 'ON' : 'OFF'}</b></p>
             </div>
+
           </div>
-        </div>        
         <div className="p-4 border-t border-gray-200">
           <button 
             className={`w-full py-2 px-4 rounded-md transition-colors font-bold ${
@@ -89,7 +94,7 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
             }`}
             onClick={onClose}
           >
-            {firstOpen ? 'Play!' : 'Close'}
+            {firstOpen ? 'Play' : 'Close'}
           </button>
         </div>
       </div>
