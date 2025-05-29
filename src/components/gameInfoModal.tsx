@@ -68,7 +68,7 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
                 <div className="bg-gray-100 p-2 rounded-md">
                 <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author}</b></p>
                 {gameSettingsInput.descriptor && (
-                    <p className="text-sm text-gray-600 mt-0">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleLowerCase()}</b>.</p>
+                    <p className="text-sm text-gray-600 mt-0">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleUpperCase()}</b>.</p>
                 )}
                 </div>
             )}

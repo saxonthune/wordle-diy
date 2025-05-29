@@ -23,7 +23,7 @@ export default function DiyContainer() {
     const parTip = 'Wordle DIY does not have a guess limit, but you can set a recommended number of guesses, or par, for players.';
     const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
 
-    const descriptors = ['Amazing', 'Breezy', 'Devious', 'Imaginative', 'Poetic', 'Stinky', 'Thoughtful', 'Tricky', 'Uplifting'];
+    const descriptors = ['Amazing', 'Breezy', 'Devious', 'Fresh', 'Imaginative', 'Poetic', 'Radical', 'Stinky', 'Thoughtful', 'Tricky', 'Uplifting'];
     
     function validateSolution(solutionValue: string, bypassDictionary: boolean) {
         if (!solutionValue || solutionValue.length === 0) {
