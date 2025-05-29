@@ -15,7 +15,7 @@ interface KeyboardGuessProps {
     lettersNotInSolution: string;
 }
 
-export default function KeyboardGuess({ onSubmit, wordLength, disabled, 
+export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings,
     handleDifficultyTipCallback, clearDifficultyTip, lettersNotInSolution }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
@@ -31,6 +31,13 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
         }
     }
     , [disabled]);
+
+    const handleDictionaryLookup = (guess: string) => {
+        if (gameSettings.useDictionary && guessIsInWordBank(guess) === false) {
+            return false;
+        }
+        return true;
+    }
 
     const handleButtonClick = (key: string) => {
         if (disabled) 
@@ -55,7 +62,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
                 if (guess.length < wordLength) {
                     if (guess.length + 1 === wordLength) {
                         if (handleDifficultyTipCallback(guess + key) && 
-                        (guessIsInWordBank(guess + key) !== false)) {
+                        (handleDictionaryLookup(guess + key) !== false)) {
                             clearDifficultyTip();
                             setCanSubmit(true);
                         }
