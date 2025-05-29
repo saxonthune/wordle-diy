@@ -20,7 +20,6 @@ export default function DiyContainer() {
     const [descriptor, setDescriptor] = React.useState("");
     const [dictionaryBypass, setDictionaryBypass] = React.useState(false);
 
-    const difficultyTip = 'Difficulty determines how previous guesses impact which letters a player can input on their current guess.';
     const parTip = 'Wordle DIY does not have a guess limit, but you can set a recommended number of guesses, or par, for players.';
     const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
 
@@ -130,7 +129,7 @@ export default function DiyContainer() {
                 <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="answer">Solution</label>
                     <input className="p-2 border rounded-md border-gray-300 bg-white" id="word" type="text"
-                        value={solution} onChange={handleSolutionChange} placeholder="Try 'PARTY'"/>
+                        value={solution} onChange={handleSolutionChange} placeholder="Enter your solution here"/>
                     <p className='py-2'>Solution Validity: {validSolutionTip}</p>
                     <i className='pb-2'>{lengthTip}</i>
                     <div className="flex items-center gap-2">
