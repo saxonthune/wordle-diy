@@ -1,15 +1,37 @@
 'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { LetterStatus } from '@/types/letterStatus';
+import { GuessLetter } from '@/types/GuessLetter';
 
 interface KeyboardProps {
     onKeyPress: (key: string) => void;
     canSubmit: boolean;
     gameComplete: boolean;
-    lettersNotInSolution: string;
+    guessHistory: GuessLetter[][];
 }
 
-export default function Keyboard({ onKeyPress: onKeyboardInput, canSubmit, gameComplete, lettersNotInSolution }: KeyboardProps) {
+export default function Keyboard({ onKeyPress: onKeyboardInput, canSubmit, gameComplete, guessHistory }: KeyboardProps) {
+
+    const letterStatuses = useMemo(() => {
+        const statuses = new Map<string, LetterStatus>();
+
+        for (const guess of guessHistory) {
+            for (const guessLetter of guess) {
+                const currentStatus = statuses.get(guessLetter.letter);
+                
+                // Priority: Correct > Partial > NotInAnswer
+                if (!currentStatus || 
+                    (guessLetter.status === LetterStatus.Correct) ||
+                    (guessLetter.status === LetterStatus.Partial && currentStatus !== LetterStatus.Correct)) {
+                    statuses.set(guessLetter.letter, guessLetter.status);
+                }
+            }
+        }
+
+        return statuses;
+    }, [guessHistory]);
+
     const handleButtonClick = (key: string) => {
         onKeyboardInput(key);
     };
@@ -40,15 +62,25 @@ export default function Keyboard({ onKeyPress: onKeyboardInput, canSubmit, gameC
         return "😎";
         }
         return canSubmit ? "🚀" : "⛔";
-    }
+    };
 
-    const buttonClass = "rounded min-w-[28px] className=text-[clamp(0.75rem, 2vw, 1.5rem)]";
     const submitBackButtonClass = "text-[clamp(0.75rem, 2vw, 1.5rem)]";
 
-    const getButtonClass = (key: string): string  => {
-        return lettersNotInSolution.includes(key) 
-            ? buttonClass + " bg-gray-600"
-            : buttonClass + " bg-gray-400"
+    const getButtonClass = (key: string): string => {
+        const status = letterStatuses.get(key) || LetterStatus.NotGuessed;
+        const baseClass = "rounded min-w-[28px] text-[clamp(0.75rem, 2vw, 1.5rem)]";
+
+        switch (status) {
+            case LetterStatus.Correct:
+                return baseClass + " bg-green-500";
+            case LetterStatus.Partial:
+                return baseClass + " bg-yellow-500";
+            case LetterStatus.NotInAnswer:
+                return baseClass + " bg-gray-600";
+            case LetterStatus.NotGuessed:
+            default:
+                return baseClass + " bg-gray-400";
+        }
     }
 
 
