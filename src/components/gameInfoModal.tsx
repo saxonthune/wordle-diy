@@ -68,7 +68,7 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
                 <div className="bg-gray-100 p-2 rounded-md">
                 <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author}</b></p>
                 {gameSettingsInput.descriptor && (
-                    <p className="text-sm text-gray-600 mt-2">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleLowerCase()}</b>.</p>
+                    <p className="text-sm text-gray-600 mt-0">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleLowerCase()}</b>.</p>
                 )}
                 </div>
             )}
@@ -81,7 +81,9 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
                 {getDifficultyDescription(gameSettingsInput.difficulty)}
                 </p>
                 <p className="text-lg text-gray-700">Par: <b>{gameSettingsInput.par}</b></p>
-                <p className="text-lg text-gray-700">Dictionary Validation: <b>{gameSettingsInput.useDictionary ? 'ON' : 'OFF'}</b></p>
+                {!gameSettingsInput.useDictionary &&
+                (<p className="text-lg text-gray-700">Dictionary Validation: <b>OFF</b></p>)
+                }
             </div>
 
           </div>
