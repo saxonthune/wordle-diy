@@ -2,10 +2,11 @@ param (
     [switch]$Clean
 )
 
-Write-Host "[deploy.ps1] Cleaning and building output directory"
+Write-Host "[deploy.ps1] Cleaning output directory"
 $productionUrls = Get-Content ./deployment.production.json | ConvertFrom-Json
 Rename-Item -Path .\.env.local -NewName .\.envfoo.local -ErrorAction Stop
 Remove-Item -Recurse -Force ./out/*
+Write-Host "[deploy.ps1] Building project"
 npm run build
 if ($LASTEXITCODE -ne 0) {
     Rename-Item -Path .\.envfoo.local -NewName .\.env.local -ErrorAction SilentlyContinue 
