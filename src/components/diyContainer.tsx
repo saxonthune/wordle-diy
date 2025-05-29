@@ -14,36 +14,55 @@ export default function DiyContainer() {
     const [difficultyBlurb, setDifficultyBlurb] = React.useState("");
     const [gameUrl, setGameUrl] = React.useState<string>("");
     const [canCreateUrl, setCanCreateUrl] = React.useState(false);
+    const [author, setAuthor] = React.useState("");
+    const [descriptor, setDescriptor] = React.useState("");
+    const [dictionaryBypass, setDictionaryBypass] = React.useState(false);
 
     const difficultyTip = 'Difficulty determines how previous guesses impact which letters a player can input on their current guess.';
     const parTip = 'Wordle DIY does not have a guess limit, but you can set a recommended number of guesses, or par, for players.';
     const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
 
-    function handleSolutionChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setGameUrl("");
-        if (/^[a-zA-Z]*$/.test(event.target.value) && event.target.value.length <= 30) {
-            setSolution(event.target.value.toUpperCase());
-        }
-
-        if (!event.target.value || event.target.value.length === 0) {
+    const descriptors = ['Amazing', 'Breezy', 'Devious', 'Handsome', 'Poetic', 'Quirky', 'Stinky', 'Thoughtful', 'Uplifting'];
+    
+    function validateSolution(solutionValue: string, bypassDictionary: boolean) {
+        if (!solutionValue || solutionValue.length === 0) {
             setCanCreateUrl(false);
             setValidSolutionTip("");
             return;
         }
 
-        switch (guessIsInWordBank(event.target.value.toUpperCase())) {
+        if (bypassDictionary) {
+            setCanCreateUrl(true);
+            setValidSolutionTip("✅ Players will be able to guess any combination of letters.");
+            return;
+        }
+
+        switch (guessIsInWordBank(solutionValue.toUpperCase())) {
             case true:
                 setCanCreateUrl(true);
                 setValidSolutionTip("✅");
                 break;
             case false:
                 setCanCreateUrl(false);
-                setValidSolutionTip("⛔ not in dictionary");
+                setValidSolutionTip("⛔ Not in dictionary");
                 break;
             case null:
                 setCanCreateUrl(true);
-                setValidSolutionTip("❔ no dictionary support for this length");
+                setValidSolutionTip("❔ No dictionary support for this length");
         }
+    }
+
+    function handleSolutionChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setGameUrl("");
+        if (/^[a-zA-Z]*$/.test(event.target.value) && event.target.value.length <= 30) {
+            setSolution(event.target.value.toUpperCase());
+        }
+        validateSolution(event.target.value, dictionaryBypass);
+    }
+
+    function handleDictionaryBypass(checked: boolean) {
+        setDictionaryBypass(checked);
+        validateSolution(solution, checked);
     }
 
     function handleDifficultyChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -69,13 +88,15 @@ export default function DiyContainer() {
             alert("Please enter a valid solution.");
             return;
         }
-
         const gameSettings: GameSettings = {
             solution: solution,
             guesses: [],
             par: par,
             difficulty: difficulty,
-            version: '1'
+            version: '1',
+            author: author ?? "anonymous",
+            descriptor: descriptor,
+            useDictionary: !dictionaryBypass
         };
 
         const gameSettingsString = JSON.stringify(gameSettings);
@@ -90,37 +111,56 @@ export default function DiyContainer() {
     return (
         <div className="flex flex-col w-[800px] mx-auto break-words gap-2">
             <h1 className="flex justify-center rounded-md shadow-md text-4xl p-2 mx-2 bg-sky-200">Wordle DIY</h1>
-
             <div className="mx-2 p-2 bg-gray-100 rounded shadow-md">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="answer">Solution</label>
                     <input className="p-2 border rounded-md border-gray-300 bg-white" id="word" type="text"
-                        value={solution} onChange={handleSolutionChange}/>
-                    <p>Solution Validity: {validSolutionTip}</p>
-                    <i>{lengthTip}</i>
+                        value={solution} onChange={handleSolutionChange} placeholder="Try 'PARTY'"/>
+                    <p className='py-2'>Solution Validity: {validSolutionTip}</p>
+                    <i className='pb-2'>{lengthTip}</i>
+                    <div className="flex items-center gap-2">
+                        <input className="w-4 h-4" id="dictionary" type="checkbox"
+                            checked={dictionaryBypass} onChange={(e) => handleDictionaryBypass(e.target.checked)}/>
+                        <span>Disable Dictionary</span>
+                    </div>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="par">Par</label>
                     <input className="p-2 border rounded-md bg-white border-gray-300" id="par" type="number"
                         value={par} onChange={(e) => setPar(Number(e.target.value))}/>
-                    <i>{parTip}</i>
+                    <i className='py-2'>{parTip}</i>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="difficulty">Difficulty</label>
                     <select className="p-2 border rounded-md bg-white border-gray-300" id="difficulty" onChange={handleDifficultyChange}>
                         <option value={Difficulty.Normal}>Regular</option>
                         <option value={Difficulty.NytHard}>Nyt Hard</option>
                         <option value={Difficulty.Hard}>Really Hard</option>
                     </select>
-                    <i>{difficultyTip}</i>
-                    <p>{difficultyBlurb}</p>
+                    {/* <i>{difficultyTip}</i> */}
+                    <i className='pt-2'>{difficultyBlurb}</i>
+                </div>
+                <div className="flex flex-col pb-4">
+                    <label className="text-lg" htmlFor="author">Author</label>
+                    <input className="p-2 border rounded-md bg-white border-gray-300" id="author" type="text"
+                        value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Your name (optional)"/>
+                </div>
+                <div className="flex flex-col pb-4">
+                    <label className="text-lg" htmlFor="descriptor">Description</label>
+                    <select className="p-2 border rounded-md bg-white border-gray-300" id="descriptor" 
+                        value={descriptor} onChange={(e) => setDescriptor(e.target.value)}>
+                        <option value="">-- None --</option>
+                        {descriptors.map((desc) => (
+                            <option key={desc} value={desc}>{desc}</option>
+                        ))}
+                    </select>
                 </div>
                 {canCreateUrl
                     ? <button className="bg-blue-500 text-white p-2 rounded-md cursor-pointer"
                         onClick={handleGenerateOnClick}>Generate Code</button>
                     : <div className="min-h-[40px]"></div>
                 }
-                
+
                 { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
                     <p><b>✅ Success!</b> Your wordle game with solution &lsquo;{solution}&rsquo; has been created. Open{' '}
                     <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
