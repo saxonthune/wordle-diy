@@ -58,7 +58,7 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50" onClick={onClose}>
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex justify-center items-center z-50" onClick={onClose}>
       <div className="bg-white rounded-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto shadow-lg" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center p-2 border-b border-gray-200 justify-center">
           <h2 className="text-2xl font-semibold text-gray-800">{firstOpen ? 'A New Wordle!' : 'Information'}</h2>

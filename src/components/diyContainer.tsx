@@ -7,11 +7,13 @@ import React from 'react';
 
 export default function DiyContainer() {
 
+    const normaldifficultyBlurb = "Normal difficulty is the default Wordle experience."
+
     const [solution, setSolution] = React.useState("");
     const [validSolutionTip, setValidSolutionTip] = React.useState("");
     const [par, setPar] = React.useState(6);
     const [difficulty, setDifficulty] = React.useState(Difficulty.Normal);
-    const [difficultyBlurb, setDifficultyBlurb] = React.useState("");
+    const [difficultyBlurb, setDifficultyBlurb] = React.useState(normaldifficultyBlurb);
     const [gameUrl, setGameUrl] = React.useState<string>("");
     const [canCreateUrl, setCanCreateUrl] = React.useState(false);
     const [author, setAuthor] = React.useState("");
@@ -65,9 +67,11 @@ export default function DiyContainer() {
         setGameUrl("");
         validateSolution(solution, checked);
     }
-
+    
     function handleAuthorChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setAuthor(event.target.value);
+        if (event.target.value.length <= 20) {
+            setAuthor(event.target.value);
+        }
         setGameUrl("");
     }
 

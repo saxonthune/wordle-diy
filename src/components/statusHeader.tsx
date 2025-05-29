@@ -12,7 +12,7 @@ export default function StatusHeader({ gameSettings, onInfoClick }: StatusHeader
             <div className="justify-self-start flex items-center">
                 {onInfoClick && (
                     <button
-                        className="hover:bg-gray-400 border-gray-400 rounded w-6 h-6 rounded text-xl transition-colors flex items-center justify-center"
+                        className="hover:bg-gray-400 bg-blue-500 rounded-full w-8 h-8 rounded text-xl transition-colors flex items-center justify-center"
                         onClick={onInfoClick}
                     >
                         ❔️
