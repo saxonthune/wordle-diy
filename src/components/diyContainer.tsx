@@ -65,6 +65,16 @@ export default function DiyContainer() {
         validateSolution(solution, checked);
     }
 
+    function handleAuthorChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setAuthor(event.target.value);
+        setGameUrl("");
+    }
+
+    function handleDescriptorChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        setDescriptor(event.target.value);
+        setGameUrl("");
+    }
+
     function handleDifficultyChange(event: React.ChangeEvent<HTMLSelectElement>) {
         const newDifficulty: Difficulty = parseInt(event.target.value);
         setDifficulty(newDifficulty);
@@ -94,7 +104,7 @@ export default function DiyContainer() {
             par: par,
             difficulty: difficulty,
             version: '1',
-            author: author ?? "anonymous",
+            author: author?.trim() || "anonymous",
             descriptor: descriptor,
             useDictionary: !dictionaryBypass
         };
@@ -143,12 +153,12 @@ export default function DiyContainer() {
                 <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="author">Author</label>
                     <input className="p-2 border rounded-md bg-white border-gray-300" id="author" type="text"
-                        value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Your name (optional)"/>
+                        value={author} onChange={handleAuthorChange} placeholder="Your name (optional)"/>
                 </div>
                 <div className="flex flex-col pb-4">
                     <label className="text-lg" htmlFor="descriptor">Description</label>
                     <select className="p-2 border rounded-md bg-white border-gray-300" id="descriptor" 
-                        value={descriptor} onChange={(e) => setDescriptor(e.target.value)}>
+                        value={descriptor} onChange={handleDescriptorChange}>
                         <option value="">-- None --</option>
                         {descriptors.map((desc) => (
                             <option key={desc} value={desc}>{desc}</option>
@@ -161,7 +171,7 @@ export default function DiyContainer() {
                     : <div className="min-h-[40px]"></div>
                 }
 
-                { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words p-2 pt-4'>
+                { (gameUrl && canCreateUrl) ? <div className='mx-auto break-words pt-4'>
                     <p><b>✅ Success!</b> Your wordle game with solution &lsquo;{solution}&rsquo; has been created. Open{' '}
                     <a href={gameUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                         {"this link\u{29C9}"}
