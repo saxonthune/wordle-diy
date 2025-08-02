@@ -185,6 +185,24 @@ export default function DiyContainer() {
                     </p>
                 </div>
                 : <div className="min-h-[60px]"></div>}
+
+                {process.env.NODE_ENV === 'development' && (
+                    <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                        <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
+                            {JSON.stringify({
+                                solution: solution,
+                                guesses: [],
+                                par: par,
+                                difficulty: difficulty,
+                                version: '1',
+                                author: author?.trim() || "anonymous",
+                                descriptor: descriptor,
+                                useDictionary: !dictionaryBypass
+                            }, null, 2)}
+                        </pre>
+                    </div>
+                )
+            }
             </div>
 
         </div>

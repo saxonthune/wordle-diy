@@ -3,6 +3,7 @@ import GameContainer from "@/components/gameContainer";
 import { urlService } from "@/services/urlService";
 import { Difficulty } from "@/types/Difficulty";
 import { GameSettings } from "@/types/GameSettings";
+import { GameSettingsProvider } from "@/contexts/GameSettingsContext";
 import React from "react";
 
 export default function Home() {
@@ -38,10 +39,12 @@ export default function Home() {
     }
 
   return (
-      <main className="h-full flex rounded"
-        style={{ height: 'calc(var(--vh, 1vh)' }}
-      >
-        <GameContainer gameSettingsInput={gameSettings} />
-      </main>
+      <GameSettingsProvider initialSettings={gameSettings}>
+        <main className="h-full flex rounded"
+          style={{ height: 'calc(var(--vh, 1vh)' }}
+        >
+          <GameContainer />
+        </main>
+      </GameSettingsProvider>
   );
 }
