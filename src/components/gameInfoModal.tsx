@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { GameSettings } from '@/types/GameSettings';
 import { Difficulty } from '@/types/Difficulty';
+import { getDescriptorName } from '@/constants/descriptors';
 
 interface GameInfoModalProps {
   isOpen: boolean;
@@ -59,16 +60,16 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex justify-center items-center z-50" onClick={onClose}>
-      <div className="bg-white rounded-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto shadow-lg" onClick={(e) => e.stopPropagation()}>
-        <div className="flex justify-between items-center p-2 border-b border-gray-200 justify-center">
+      <div className="bg-white rounded-lg max-w-md w-full mx-4 max-h-[90vh] shadow-lg flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center p-2 border-b border-gray-200 justify-center flex-shrink-0">
           <h2 className="text-2xl font-semibold text-gray-800">{firstOpen ? 'A New Wordle!' : 'Information'}</h2>
         </div>
-          <div className="p-4 space-y-2">
+          <div className="p-4 space-y-2 overflow-y-auto flex-1">
             {gameSettingsInput.author && (
                 <div className="bg-gray-100 p-2 rounded-md">
                 <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author}</b></p>
                 {gameSettingsInput.descriptor && (
-                    <p className="text-sm text-gray-600 mt-0">The author would describe their puzzle as <b>{gameSettingsInput.descriptor.toLocaleUpperCase()}</b>.</p>
+                    <p className="text-sm text-gray-600 mt-0">This puzzle&apos;s vibes are... <b>{getDescriptorName(gameSettingsInput.descriptor).toLocaleUpperCase()}</b>.</p>
                 )}
                 </div>
             )}
@@ -86,8 +87,15 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
                 }
             </div>
 
+            <div className="bg-gray-100 p-2 rounded-md">
+                <p className="text-lg text-gray-700">How to Play</p>
+                <p className="text-sm text-gray-600 pb-2">1. Try to guess the puzzle&apos;s solution in {gameSettingsInput.par} tries or less.</p>
+                <p className="text-sm text-gray-600 pb-2">2. Type in your guess and submit your word by hitting the 🚀 key on the built-in keyboard.</p>
+                <p className="text-sm text-gray-600">3. The color of the tiles will change after you submit your word. A yellow tile indicates that you picked the right letter but it&apos;s in the wrong spot. The green tile indicates that you picked the right letter in the correct spot. The gray tile indicates that the letter you picked is not included in the word at all</p>
+            </div>
+
           </div>
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 flex-shrink-0">
           <button 
             className={`w-full py-2 px-4 rounded-md transition-colors font-bold ${
               firstOpen 

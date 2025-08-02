@@ -3,6 +3,7 @@ import { urlService } from '@/services/urlService';
 import { guessIsInWordBank } from '@/services/wordBankValidationService';
 import { Difficulty } from '@/types/Difficulty';
 import { GameSettings } from '@/types/GameSettings';
+import { descriptors } from '@/constants/descriptors';
 import React from 'react';
 
 export default function DiyContainer() {
@@ -22,8 +23,6 @@ export default function DiyContainer() {
 
     const parTip = 'Wordle DIY does not have a guess limit, but you can set a recommended number of guesses, or par, for players.';
     const lengthTip = 'You can pick any word length, but only five-letter solutions currently have dictionary support.';
-
-    const descriptors = ['Amazing', 'Breezy', 'Devious', 'Fresh', 'Imaginative', 'Poetic', 'Radical', 'Stinky', 'Thoughtful', 'Tricky', 'Uplifting'];
     
     function validateSolution(solutionValue: string, bypassDictionary: boolean) {
         if (!solutionValue || solutionValue.length === 0) {
@@ -160,12 +159,14 @@ export default function DiyContainer() {
                         value={author} onChange={handleAuthorChange} placeholder="Your name (optional)"/>
                 </div>
                 <div className="flex flex-col pb-4">
-                    <label className="text-lg" htmlFor="descriptor">Description</label>
+                    <label className="text-lg" htmlFor="descriptor">Vibes</label>
                     <select className="p-2 border rounded-md bg-white border-gray-300" id="descriptor" 
                         value={descriptor} onChange={handleDescriptorChange}>
                         <option value="">-- None --</option>
-                        {descriptors.map((desc) => (
-                            <option key={desc} value={desc}>{desc}</option>
+                        {Object.entries(descriptors)
+                            .sort(([, a], [, b]) => a.localeCompare(b))
+                            .map(([key, value]) => (
+                            <option key={key} value={key}>{value}</option>
                         ))}
                     </select>
                 </div>
