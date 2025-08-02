@@ -6,13 +6,15 @@ import { GameSettings } from "@/types/GameSettings";
 import React from "react";
 
 export default function Home() {
-
     const defaultGameSettings: GameSettings = {
         solution: "",
         guesses: [],
         par: 6,
         difficulty: Difficulty.Normal,
-        version: "1.0"
+        version: "1.0",
+        author: "",
+        descriptor: "",
+        useDictionary: true
     };
 
     const [gameSettings, setGameSettings] = React.useState(defaultGameSettings);

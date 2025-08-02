@@ -6,4 +6,7 @@ export interface GameSettings {
     par: number;
     difficulty: Difficulty;
     version: string;
+    author: string;
+    descriptor: string;
+    useDictionary: boolean;
 }

@@ -11,17 +11,19 @@ import { difficultyValidationService } from '@/services/difficultyValidationServ
 import { DifficultyRule } from '@/types/DifficultyRule';
 import DifficultyTip from './difficultyTip';
 import { BLOCK_SIZE } from '@/constants/constants';
+import GameInfoModal from './gameInfoModal';
 
 interface GameContainerProps {
     gameSettingsInput: GameSettings;
 }
 
 export default function GameContainer( { gameSettingsInput }: GameContainerProps) {
-
     const [gameComplete, setGameComplete] = React.useState(false);
     const [guessHistory, setGuessHistory] = React.useState<GuessLetter[][]>([]);
     const [gameSettings, setGameSettings] = React.useState<GameSettings>(() => ({...gameSettingsInput}));
     const [difficultyRule, setDifficultyRule] = React.useState(DifficultyRule.None);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [isFirstOpen, setIsFirstOpen] = React.useState(true);
 
     React.useEffect(() => {
         const guesses = gameSettingsInput.guesses.map(guess => 
@@ -45,6 +47,13 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
     }
     , [gameSettingsInput]);
 
+    // Open modal automatically on first load
+    React.useEffect(() => {
+        if (gameSettings.solution && isFirstOpen && gameSettings.guesses.length === 0) {
+            setIsModalOpen(true);
+        }
+    }, [gameSettings.solution, isFirstOpen, gameSettings.guesses.length]);
+
 
     function handleGuess(guess: string) {
         const guessData = gradeGuess(gameSettings.solution, guess);
@@ -67,6 +76,11 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
         setDifficultyRule(DifficultyRule.None);
     }
 
+    function handleModalClose() {
+        setIsModalOpen(false);
+        setIsFirstOpen(false);
+    }
+
     if (!gameSettings || !gameSettings.solution) {
         return <div>Loading...</div>;
     }
@@ -77,13 +91,13 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                 <div className="sticky w-full p-2 bg-yellow-100 rounded-md shadow-md">
                     <DifficultyTip difficultyRule={difficultyRule} />
                 </div>
-            : <div className="sticky w-full p-2 bg-gray-200 rounded-md">
-                <StatusHeader gameSettings={gameSettings}/>
+                : <div className="sticky w-full p-2 bg-gray-200 rounded-md">
+                <StatusHeader gameSettings={gameSettings} onInfoClick={() => setIsModalOpen(true)} />
             </div>
             }
             <div className="flex-grow overflow-y-auto p-2">
-                { /* debug 
-                <div className='flex flex-col w-full p-4 break-words'>
+                {
+                /* <div id='debug' className='flex flex-col w-full p-4 break-words'>
                     <div>{JSON.stringify(gameSettings)}</div>
                 </div> */
                 }
@@ -109,12 +123,15 @@ export default function GameContainer( { gameSettingsInput }: GameContainerProps
                     gameSettings={gameSettings}
                     handleDifficultyTipCallback={handleDifficultyTipCallback}
                     clearDifficultyTip={clearDifficultyTip}
-                    lettersNotInSolution={guessHistory.flat()
-                        .filter(guessLetter => guessLetter.status === LetterStatus.NotInAnswer)
-                        .map(guessLetter => guessLetter.letter.toUpperCase())
-                        .join("")}
+                    guessHistory={guessHistory}
                 />
             </div>
+              <GameInfoModal 
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                gameSettingsInput={gameSettings}
+                firstOpen={isFirstOpen}
+            />
         </div>
     )
 }

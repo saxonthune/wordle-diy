@@ -4,6 +4,7 @@ import React from "react";
 import Keyboard from "./keyboard";
 import { guessIsInWordBank } from "@/services/wordBankValidationService";
 import { GameSettings } from "@/types/GameSettings";
+import { GuessLetter } from "@/types/GuessLetter";
 
 interface KeyboardGuessProps {
     onSubmit: (guess: string) => void;
@@ -12,11 +13,11 @@ interface KeyboardGuessProps {
     gameSettings: GameSettings;
     handleDifficultyTipCallback: (guess: string) => boolean;
     clearDifficultyTip: () => void; 
-    lettersNotInSolution: string;
+    guessHistory: GuessLetter[][];
 }
 
-export default function KeyboardGuess({ onSubmit, wordLength, disabled, 
-    handleDifficultyTipCallback, clearDifficultyTip, lettersNotInSolution }: KeyboardGuessProps) {
+export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings,
+    handleDifficultyTipCallback, clearDifficultyTip, guessHistory }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -31,6 +32,13 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
         }
     }
     , [disabled]);
+    
+    const handleDictionaryLookup = (guess: string) => {
+        if (gameSettings.useDictionary && guessIsInWordBank(guess) === false) {
+            return false;
+        }
+        return true;
+    };
 
     const handleButtonClick = (key: string) => {
         if (disabled) 
@@ -55,7 +63,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
                 if (guess.length < wordLength) {
                     if (guess.length + 1 === wordLength) {
                         if (handleDifficultyTipCallback(guess + key) && 
-                        (guessIsInWordBank(guess + key) !== false)) {
+                        (handleDictionaryLookup(guess + key) !== false)) {
                             clearDifficultyTip();
                             setCanSubmit(true);
                         }
@@ -76,8 +84,8 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled,
                 onKeyPress={handleButtonClick} 
                 canSubmit={canSubmit} 
                 gameComplete={disabled}
-                lettersNotInSolution={lettersNotInSolution}
-                />
+                guessHistory={guessHistory}
+            />
         </div>
 
     );
