@@ -15,10 +15,11 @@ interface KeyboardGuessProps {
     clearDifficultyTip: () => void; 
     guessHistory: GuessLetter[][];
     onViewResults?: () => void;
+    isAnimating?: boolean;
 }
 
 export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings,
-    handleDifficultyTipCallback, clearDifficultyTip, guessHistory, onViewResults }: KeyboardGuessProps) {
+    handleDifficultyTipCallback, clearDifficultyTip, guessHistory, onViewResults, isAnimating = false }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -28,11 +29,13 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
     const invalidTextClass = "text-red-500";
     
     React.useEffect(() => {
-        if (disabled) {
+        if (disabled && !isAnimating) {
             setGuess("Well done!");
+        } else if (!disabled || isAnimating) {
+            setGuess("");
         }
     }
-    , [disabled]);
+    , [disabled, isAnimating]);
     
     const handleDictionaryLookup = (guess: string) => {
         if (gameSettings.useDictionary && guessIsInWordBank(guess) === false) {
@@ -42,7 +45,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
     };
 
     const handleButtonClick = (key: string) => {
-        if (disabled) 
+        if (disabled || isAnimating) 
             return;
         setTextClass(validTextClass)
 
@@ -80,7 +83,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
     
     return (
         <div className="flex flex-col items-center gap-1">
-            {disabled ? (
+            {disabled && !isAnimating ? (
                 <div className="flex items-center gap-3 text-2xl min-h-[28px]">
                     <span className={textClass}>Well done!</span>
                     {onViewResults && (
@@ -98,7 +101,7 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
             <Keyboard 
                 onKeyPress={handleButtonClick} 
                 canSubmit={canSubmit} 
-                gameComplete={disabled}
+                gameComplete={disabled && !isAnimating}
                 guessHistory={guessHistory}
             />
         </div>

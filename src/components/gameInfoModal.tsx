@@ -36,12 +36,12 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
   const getDifficultyDescription = (difficulty: Difficulty): string => {
     switch (difficulty) {
       case Difficulty.NytHard:
-        return "NYT Hard: all correct (green) letters are in the correct position, and all partial (yellow) letters are used.";
+        return "In subsequent guesses, all correct (green) letters must be used in the correct position, and all partial (yellow) letters must be used.";
       case Difficulty.Hard:
-        return "Hard difficulty that all correct (green) letters are in the correct position, all partial (yellow) letters are used, ruled-out (dark grey) letters cannot be reused, and partial (yellow) letters placed in previous positions.";
+        return "In subsequent guesses, all correct (green) letters must be used in the correct position, all partial (yellow) letters must be used, but not in previous positions, and ruled-out (dark grey) letters cannot be reused.";
       case Difficulty.Normal:
       default:
-        return "Normal difficulty is the default Wordle experience.";
+        return "The default Wordle experience.";
     }
   };
 
@@ -89,7 +89,7 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
                 <p className="text-lg text-gray-700">How to Play</p>
                 <p className="text-sm text-gray-600 pb-2">1. Try to guess the puzzle&apos;s solution in {gameSettingsInput.par} tries or less.</p>
                 <p className="text-sm text-gray-600 pb-2">2. Type in your guess and submit your word by hitting the 🚀 key on the built-in keyboard.</p>
-                <p className="text-sm text-gray-600">3. The color of the tiles will change after you submit your word. A yellow tile indicates that you picked the right letter but it&apos;s in the wrong spot. The green tile indicates that you picked the right letter in the correct spot. The gray tile indicates that the letter you picked is not included in the word at all</p>
+                <p className="text-sm text-gray-600">3. The color of the tiles will change after you submit your word. A yellow tile indicates that you picked the right letter but it&apos;s in the wrong spot. The green tile indicates that you picked the right letter in the correct spot. The gray tile indicates that the letter you picked is not included in the word at all.</p>
             </div>
 
           </div>

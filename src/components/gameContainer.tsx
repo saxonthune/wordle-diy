@@ -22,6 +22,8 @@ export default function GameContainer() {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isFirstOpen, setIsFirstOpen] = React.useState(true);
     const [isResultsModalOpen, setIsResultsModalOpen] = React.useState(false);
+    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [animatingLetterIndex, setAnimatingLetterIndex] = React.useState(-1);
 
     React.useEffect(() => {
         if (!gameSettings) return;
@@ -59,11 +61,38 @@ export default function GameContainer() {
         if (!gameSettings) return;
         
         const guessData = gradeGuess(gameSettings.solution, guess);
-        setGuessHistory([...guessHistory, guessData]);
-        if (guessData.every((letter) => letter.status === LetterStatus.Correct)) {
-            setGameComplete(true);
+        const isCorrectGuess = guessData.every((letter) => letter.status === LetterStatus.Correct);
+        
+        if (isCorrectGuess) {
+            setIsAnimating(true);
+            setAnimatingLetterIndex(0);
+            
+            // Add the guess to history but don't show it as complete yet
+            setGuessHistory([...guessHistory, guessData]);
+            updateGameSettings({ guesses: [...gameSettings.guesses, guess] });
+            
+            // Animate each letter revealing one by one
+            guessData.forEach((_, index) => {
+                setTimeout(() => {
+                    setAnimatingLetterIndex(index);
+                    
+                    // After the last letter animation
+                    if (index === guessData.length - 1) {
+                        setTimeout(() => {
+                            setGameComplete(true);
+                            setIsAnimating(false);
+                            setAnimatingLetterIndex(-1);
+                            // Automatically open results modal after animation
+                            setIsResultsModalOpen(true);
+                        }, 1200); // Longer delay after last letter before showing completion UI
+                    }
+                }, index * 300); // 200ms delay between each letter
+            });
+        } else {
+            // Normal non-winning guess
+            setGuessHistory([...guessHistory, guessData]);
+            updateGameSettings({ guesses: [...gameSettings.guesses, guess] });
         }
-        updateGameSettings({ guesses: [...gameSettings.guesses, guess] });
     }
 
     function handleDifficultyTipCallback(guess: string): boolean {
@@ -109,20 +138,27 @@ export default function GameContainer() {
             </div>
             }
             <div className="flex-grow overflow-y-auto p-2">
-                {process.env.NODE_ENV === 'development' && (
-                    <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                        <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">
-                            {JSON.stringify(gameSettings, null, 2)}
-                        </pre>
-                    </div>
-                )}
+                {
+                // process.env.NODE_ENV === 'development' && (
+                //     <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                //         <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">
+                //             {JSON.stringify(gameSettings, null, 2)}
+                //         </pre>
+                //     </div>
+                // )
+                }
                 {
                 /* <div id='debug' className='flex flex-col w-full p-4 break-words'>
                     <div>{JSON.stringify(gameSettings)}</div>
                 </div> */
                 }
-                <GuessHistory guessHistory={guessHistory} />
-                {!gameComplete ? (
+                <GuessHistory 
+                    guessHistory={guessHistory} 
+                    isAnimating={isAnimating}
+                    animatingGuessIndex={guessHistory.length - 1}
+                    animatingLetterIndex={animatingLetterIndex}
+                />
+                {!gameComplete && !isAnimating ? (
                     <div className={`grid gap-1 pb-[4px] items-center justify-center mx-auto`}
                         key={guessHistory.length}
                         style={{
@@ -135,27 +171,28 @@ export default function GameContainer() {
                             </div>
                         ))}
                     </div>
-                ) : (
+                ) : gameComplete && !isAnimating ? (
                     <div className="text-center mt-4">
                         <a 
                             className="inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors font-bold"
                             href={`${process.env.NEXT_PUBLIC_ROOT_URL}/diy`}
                         >
-                            Share Your Own Wordle
+                            Make Your Own Wordle!
                         </a>
                     </div>
-                )}
+                ) : null}
             </div>
             <div className="sticky bottom-0 w-full pb-1 pt-1 bg-white border-t border-gray-300 rounded-b-md">
                 <KeyboardGuess
                     onSubmit={(guess) => handleGuess(guess)}
                     wordLength={gameSettings.solution.length}
-                    disabled={gameComplete}
+                    disabled={gameComplete || isAnimating}
                     gameSettings={gameSettings}
                     handleDifficultyTipCallback={handleDifficultyTipCallback}
                     clearDifficultyTip={clearDifficultyTip}
                     guessHistory={guessHistory}
                     onViewResults={handleResultsModalOpen}
+                    isAnimating={isAnimating}
                 />
             </div>
               <GameInfoModal 

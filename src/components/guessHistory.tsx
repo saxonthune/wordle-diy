@@ -6,21 +6,28 @@ import { BLOCK_SIZE } from '@/constants/constants';
 
 interface GuessHistoryProps {
   guessHistory: GuessLetter[][];
+  isAnimating?: boolean;
+  animatingGuessIndex?: number;
+  animatingLetterIndex?: number;
 }
 
-export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
+export default function GuessHistory({ guessHistory, isAnimating = false, animatingGuessIndex, animatingLetterIndex = -1 }: GuessHistoryProps) {
 
-    function getClassName(letterStatus: LetterStatus): string {
-        switch (letterStatus) {
-            case LetterStatus.NotInAnswer:
-                return 'bg-gray-500';
-            case LetterStatus.Partial:
-                return 'bg-yellow-500';
-            case LetterStatus.Correct:
-                return 'bg-green-500';
-            default:
-                return '';
-        }
+    function getClassName(letterStatus: LetterStatus, isCurrentlyAnimating: boolean = false): string {
+        const baseClass = (() => {
+            switch (letterStatus) {
+                case LetterStatus.NotInAnswer:
+                    return 'bg-gray-500';
+                case LetterStatus.Partial:
+                    return 'bg-yellow-500';
+                case LetterStatus.Correct:
+                    return 'bg-green-500';
+                default:
+                    return '';
+            }
+        })();
+        
+        return isCurrentlyAnimating ? `${baseClass} animate-bounce` : baseClass;
     }
 
   return (
@@ -33,11 +40,19 @@ export default function GuessHistory({ guessHistory }: GuessHistoryProps) {
             maxWidth: `${(BLOCK_SIZE+4)*guess.length}px`, 
         }}
         >
-        {guess.map((guessDatum, i) => (
-            <div key={i} className={`text-3xl max-h-[40px] text-white text-center aspect-square rounded flex items-center justify-center ${getClassName(guessDatum.status)}`}>
-                {guessDatum.letter}
-            </div>
-        ))}
+        {guess.map((guessDatum, letterIndex) => {
+            const isWinningGuess = animatingGuessIndex === i;
+            const isLetterRevealed = !isWinningGuess || !isAnimating || letterIndex <= animatingLetterIndex;
+            const isCurrentlyAnimating = isWinningGuess && isAnimating && letterIndex === animatingLetterIndex;
+            
+            return (
+                <div key={letterIndex} className={`text-3xl max-h-[40px] text-white text-center aspect-square rounded flex items-center justify-center ${
+                    isLetterRevealed ? getClassName(guessDatum.status, isCurrentlyAnimating) : 'bg-gray-300'
+                }`}>
+                    {isLetterRevealed ? guessDatum.letter : ''}
+                </div>
+            );
+        })}
       </div>
       ))}
     </div>
