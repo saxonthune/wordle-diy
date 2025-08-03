@@ -67,8 +67,9 @@ export default function DiyContainer() {
     }
     
     function handleAuthorChange(event: React.ChangeEvent<HTMLInputElement>) {
-        if (event.target.value.length <= 20) {
-            setAuthor(event.target.value);
+        const value = event.target.value;
+        if (!value.includes('|') && !value.includes(',') && value.length <= 20) {
+            setAuthor(value);
         }
         setGameUrl("");
     }
@@ -107,13 +108,12 @@ export default function DiyContainer() {
             par: par,
             difficulty: difficulty,
             version: '1',
-            author: author?.trim() || "anonymous",
+            author: author?.trim() || "",
             descriptor: descriptor,
             useDictionary: !dictionaryBypass
         };
 
-        const gameSettingsString = JSON.stringify(gameSettings);
-        const gameCode = urlService.btoaUrlSafe(gameSettingsString);
+        const gameCode = urlService.encodeGameSettings(gameSettings);
 
         const url = `${process.env.NEXT_PUBLIC_ROOT_URL}/?code=${gameCode}`;
         console.log(`root url: ${process.env.NEXT_PUBLIC_ROOT_URL}`);
@@ -195,7 +195,7 @@ export default function DiyContainer() {
                                 par: par,
                                 difficulty: difficulty,
                                 version: '1',
-                                author: author?.trim() || "anonymous",
+                                author: author?.trim() || '',
                                 descriptor: descriptor,
                                 useDictionary: !dictionaryBypass
                             }, null, 2)}

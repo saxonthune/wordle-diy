@@ -65,14 +65,12 @@ const GameInfoModal: React.FC<GameInfoModalProps> = ({ isOpen, onClose, gameSett
           <h2 className="text-2xl font-semibold text-gray-800">{firstOpen ? 'A New Wordle!' : 'Information'}</h2>
         </div>
           <div className="p-4 space-y-2 overflow-y-auto flex-1">
-            {gameSettingsInput.author && (
-                <div className="bg-gray-100 p-2 rounded-md">
-                <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author}</b></p>
+            <div className="bg-gray-100 p-2 rounded-md">
+                <p className="text-lg text-gray-700">Made By: <b>{gameSettingsInput.author || "Anonymous"}</b></p>
                 {gameSettingsInput.descriptor && (
                     <p className="text-sm text-gray-600 mt-0">This puzzle&apos;s vibes are... <b>{getDescriptorName(gameSettingsInput.descriptor).toLocaleUpperCase()}</b>.</p>
                 )}
-                </div>
-            )}
+            </div>
 
 
             <div className="bg-gray-100 p-2 rounded-md">

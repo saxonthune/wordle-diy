@@ -34,8 +34,20 @@ export default function Home() {
             return;
         }
 
-        const gameSettingsString = urlService.atobUrlSafe(code.replace(/-/g, '+').replace(/_/g, '/'));
-        setGameSettings(JSON.parse(gameSettingsString) as GameSettings);
+        try {
+            const gameSettings = urlService.decodeGameSettings(code);
+            setGameSettings(gameSettings);
+        } catch (error) {
+            // Fallback to old method for backwards compatibility
+            console.warn('Failed to decode with new method, trying legacy decode:', error);
+            try {
+                const gameSettingsString = urlService.atobUrlSafe(code.replace(/-/g, '+').replace(/_/g, '/'));
+                setGameSettings(JSON.parse(gameSettingsString) as GameSettings);
+            } catch (legacyError) {
+                console.error('Failed to decode URL with both methods:', legacyError);
+                window.location.href = process.env.NEXT_PUBLIC_ROOT_URL + '/diy';
+            }
+        }
     }
 
   return (
