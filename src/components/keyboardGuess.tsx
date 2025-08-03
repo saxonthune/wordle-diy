@@ -14,10 +14,11 @@ interface KeyboardGuessProps {
     handleDifficultyTipCallback: (guess: string) => boolean;
     clearDifficultyTip: () => void; 
     guessHistory: GuessLetter[][];
+    onViewResults?: () => void;
 }
 
 export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSettings,
-    handleDifficultyTipCallback, clearDifficultyTip, guessHistory }: KeyboardGuessProps) {
+    handleDifficultyTipCallback, clearDifficultyTip, guessHistory, onViewResults }: KeyboardGuessProps) {
 
     const [guess, setGuess] = React.useState("");
     const [canSubmit, setCanSubmit] = React.useState(false);
@@ -79,7 +80,21 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
     
     return (
         <div className="flex flex-col items-center gap-1">
-            <div className={`text-2xl min-h-[28px] ${textClass}`}>{guess}</div>
+            {disabled ? (
+                <div className="flex items-center gap-3 text-2xl min-h-[28px]">
+                    <span className={textClass}>Well done!</span>
+                    {onViewResults && (
+                        <button
+                            onClick={onViewResults}
+                            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors font-bold"
+                        >
+                            View Results
+                        </button>
+                    )}
+                </div>
+            ) : (
+                <div className={`text-2xl min-h-[28px] ${textClass}`}>{guess}</div>
+            )}
             <Keyboard 
                 onKeyPress={handleButtonClick} 
                 canSubmit={canSubmit} 
@@ -87,7 +102,6 @@ export default function KeyboardGuess({ onSubmit, wordLength, disabled, gameSett
                 guessHistory={guessHistory}
             />
         </div>
-
     );
 }
 

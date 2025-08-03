@@ -11,6 +11,7 @@ import { DifficultyRule } from '@/types/DifficultyRule';
 import DifficultyTip from './difficultyTip';
 import { BLOCK_SIZE } from '@/constants/constants';
 import GameInfoModal from './gameInfoModal';
+import GameResultsModal from './gameResultsModal';
 import { useGameSettings } from '@/contexts/GameSettingsContext';
 
 export default function GameContainer() {
@@ -20,6 +21,7 @@ export default function GameContainer() {
     const [difficultyRule, setDifficultyRule] = React.useState(DifficultyRule.None);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [isFirstOpen, setIsFirstOpen] = React.useState(true);
+    const [isResultsModalOpen, setIsResultsModalOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (!gameSettings) return;
@@ -83,6 +85,14 @@ export default function GameContainer() {
         setIsFirstOpen(false);
     }
 
+    function handleResultsModalOpen() {
+        setIsResultsModalOpen(true);
+    }
+
+    function handleResultsModalClose() {
+        setIsResultsModalOpen(false);
+    }
+
     if (!gameSettings || !gameSettings.solution) {
         console.log('GameContainer: gameSettings is null or has no solution:', gameSettings);
         return <div>Loading...</div>;
@@ -134,6 +144,7 @@ export default function GameContainer() {
                     handleDifficultyTipCallback={handleDifficultyTipCallback}
                     clearDifficultyTip={clearDifficultyTip}
                     guessHistory={guessHistory}
+                    onViewResults={handleResultsModalOpen}
                 />
             </div>
               <GameInfoModal 
@@ -141,6 +152,11 @@ export default function GameContainer() {
                 onClose={handleModalClose}
                 gameSettingsInput={gameSettings}
                 firstOpen={isFirstOpen}
+            />
+            <GameResultsModal
+                isOpen={isResultsModalOpen}
+                onClose={handleResultsModalClose}
+                guessHistory={guessHistory}
             />
         </div>
     )
