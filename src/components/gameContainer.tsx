@@ -122,18 +122,29 @@ export default function GameContainer() {
                 </div> */
                 }
                 <GuessHistory guessHistory={guessHistory} />
-                <div className={`grid gap-1 pb-[4px] items-center justify-center mx-auto`}
-                    key={guessHistory.length}
-                    style={{
-                        gridTemplateColumns: `repeat(${gameSettings.solution.length}, minmax(0, 1fr))`, 
-                        maxWidth: `${(BLOCK_SIZE+4)*gameSettings.solution.length}px`, 
-                    }}
-                >
-                    {gameSettings.solution.split('').map((letter, i) => (
-                        <div key={i} className={`border-1 border-gray-300 max-h-[40px] aspect-square rounded items-center justify-center`}>
-                        </div>
-        ))}
-                </div>
+                {!gameComplete ? (
+                    <div className={`grid gap-1 pb-[4px] items-center justify-center mx-auto`}
+                        key={guessHistory.length}
+                        style={{
+                            gridTemplateColumns: `repeat(${gameSettings.solution.length}, minmax(0, 1fr))`, 
+                            maxWidth: `${(BLOCK_SIZE+4)*gameSettings.solution.length}px`, 
+                        }}
+                    >
+                        {gameSettings.solution.split('').map((letter, i) => (
+                            <div key={i} className={`border-1 border-gray-300 max-h-[40px] aspect-square rounded items-center justify-center`}>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center mt-4">
+                        <a 
+                            className="inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors font-bold"
+                            href={`${process.env.NEXT_PUBLIC_ROOT_URL}/diy`}
+                        >
+                            Share Your Own Wordle
+                        </a>
+                    </div>
+                )}
             </div>
             <div className="sticky bottom-0 w-full pb-1 pt-1 bg-white border-t border-gray-300 rounded-b-md">
                 <KeyboardGuess
@@ -157,6 +168,7 @@ export default function GameContainer() {
                 isOpen={isResultsModalOpen}
                 onClose={handleResultsModalClose}
                 guessHistory={guessHistory}
+                gameSettings={gameSettings}
             />
         </div>
     )

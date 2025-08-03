@@ -3,17 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import { GuessLetter } from '@/types/GuessLetter';
 import { LetterStatus } from '@/types/letterStatus';
+import { GameSettings } from '@/types/GameSettings';
 
 interface GameResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
   guessHistory: GuessLetter[][];
+  gameSettings: GameSettings;
 }
 
 const GameResultsModal: React.FC<GameResultsModalProps> = ({ 
   isOpen, 
   onClose, 
-  guessHistory 
+  guessHistory,
+  gameSettings 
 }) => {
   const [copyButtonText, setCopyButtonText] = useState('Copy Link');
 
@@ -74,8 +77,15 @@ const GameResultsModal: React.FC<GameResultsModalProps> = ({
         </div>
         
         <div className="p-4 space-y-4 overflow-y-auto flex-1">
+          <div className="bg-gray-100 rounded-md">
+            <div className="text-center mb-4">
+              <p className="text-xl text-gray-600 mt-2 p-2">
+                Made by: <span className="font-semibold">{gameSettings.author || 'Anonymous'}</span>
+              </p>
+            </div>
+          </div>
           <div className="bg-gray-100 p-4 rounded-md">
-            <h3 className="text-lg font-semibold text-gray-700 mb-3 text-center">Your Results</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-3 text-center">Results</h3>
             <div className="space-y-2">
               {guessHistory.map((guess, index) => (
                 <div key={index} className="flex justify-center space-x-1">
