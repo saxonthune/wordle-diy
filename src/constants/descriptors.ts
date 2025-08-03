@@ -35,7 +35,7 @@ export const descriptors: Record<string, string> = {
   7: 'Thoughtful',
   8: 'Treacherous',
   9: 'Tricky',
-  a0: 'Uplifting',
+  a0: 'Unspeakable',
   a1: 'Uplifting',
   a2: 'Wobbly',
   a3: 'Wonderful',
